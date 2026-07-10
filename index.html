@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -514,6 +515,19 @@
   }
   @media (hover:none), (pointer:coarse){
     .cursor-dot{display:none;}
+  }  /* ---------- AVATAR ---------- */
+  .avatar-wrap{
+    display:inline-flex;
+    margin-bottom:22px;
+  }
+  .avatar-img{
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    object-fit:cover;
+    object-position:center;
+    border:2px solid var(--amber);
+    box-shadow:0 0 0 4px rgba(245,166,35,0.12), 0 8px 24px -8px rgba(0,0,0,0.6);
   }
 </style>
 </head>
@@ -536,6 +550,9 @@
   <!-- HERO -->
   <section class="hero" style="padding-top:88px;">
     <div>
+      <div class="avatar-wrap">
+        <img src="assets/profile.jpg" alt="King-Adonai Arubina" class="avatar-img">
+      </div>
       <div class="eyebrow">Cybersecurity — SOC Analyst Focus</div>
       <h1>King-Adonai Arubina —<br>turning <span class="accent">logs into leads.</span></h1>
       <div class="hero-sub">Mechatronics Engineer → Security+ Certified → Seeking SOC / Cybersecurity roles</div>

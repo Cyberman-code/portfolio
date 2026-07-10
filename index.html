@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -489,9 +490,36 @@
     *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
     html{scroll-behavior:auto;}
   }
+  /* ---------- CURSOR TRAIL DOT ---------- */
+  .cursor-dot{
+    position:fixed;
+    top:0;
+    left:0;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 10px 1px rgba(245,166,35,0.55);
+    pointer-events:none;
+    z-index:999;
+    transform:translate(-50%, -50%);
+    opacity:0;
+    transition:opacity 0.25s ease, background 0.2s ease, box-shadow 0.2s ease;
+    will-change:transform;
+  }
+  .cursor-dot.visible{opacity:0.9;}
+  .cursor-dot.pointer-active{
+    background:var(--cyan);
+    box-shadow:0 0 12px 2px rgba(79,209,197,0.6);
+  }
+  @media (hover:none), (pointer:coarse){
+    .cursor-dot{display:none;}
+  }
 </style>
 </head>
 <body>
+
+<div class="cursor-dot" id="cursorDot"></div>
 
 <div class="topbar">
   <div class="topbar-inner">
@@ -519,6 +547,7 @@
       </p>
       <div class="btn-row">
         <a href="#projects" class="btn btn-primary">▸ View Projects</a>
+        <a href="assets/King-Adonai_Arubina_CV.pdf" target="_blank" rel="noopener" class="btn btn-outline">📄 My Resume</a>
         <a href="https://github.com/Cyberman-code" target="_blank" rel="noopener" class="btn btn-outline">⌥ GitHub Profile</a>
       </div>
     </div>
@@ -806,6 +835,48 @@
     setTimeout(pushLine, 550);
   }
   pushLine();
+
+  // ---------- Trailing cursor dot ----------
+  (function(){
+    const dot = document.getElementById('cursorDot');
+    if(!dot) return;
+
+    let mouseX = 0, mouseY = 0;
+    let dotX = 0, dotY = 0;
+    let started = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if(!started){
+        dotX = mouseX;
+        dotY = mouseY;
+        started = true;
+        dot.classList.add('visible');
+      }
+    });
+
+    window.addEventListener('mouseleave', () => dot.classList.remove('visible'));
+    window.addEventListener('mouseenter', () => { if(started) dot.classList.add('visible'); });
+
+    // Slightly larger + brighter when hovering something clickable
+    const hoverTargets = 'a, button, .btn, .project-link, .skill-card, .cert-card';
+    document.addEventListener('mouseover', (e) => {
+      if(e.target.closest(hoverTargets)) dot.classList.add('pointer-active');
+    });
+    document.addEventListener('mouseout', (e) => {
+      if(e.target.closest(hoverTargets)) dot.classList.remove('pointer-active');
+    });
+
+    function animate(){
+      // Ease the dot a few steps behind the real cursor
+      dotX += (mouseX - dotX) * 0.15;
+      dotY += (mouseY - dotY) * 0.15;
+      dot.style.transform = `translate(-50%, -50%) translate(${dotX}px, ${dotY}px)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
 </script>
 
 </body>
